@@ -1,0 +1,114 @@
+import {
+	_electron,
+	_electron as electron,
+	ElectronApplication,
+	Page,
+} from "playwright";
+import {expect} from "vitest"
+import { App, TFile, Vault } from "obsidian";
+import { execSync } from "child_process";
+import path from "path";
+import { EOL } from "os";
+type RawOptions = NonNullable<Parameters<typeof _electron.launch>[0]>;
+export type TestOptions = Omit<RawOptions, "executablePath"> & {
+	vault: string;
+};
+export class ObsidianTester {
+	#loadPromise: Promise<void>;
+	
+	public electronApp: ElectronApplication | null = null;
+	public page: Page;
+	public app: App;
+
+	constructor(options: Partial<TestOptions & { vault: string }>) {
+		const args = [...(options.args || [])];
+		if (options.vault)
+			args.push(`obsidian://open?vault=${encodeURI(options.vault)}`);
+		this.#loadPromise = new Promise((res, rej) => {
+			electron
+				.launch({
+					...options,
+					args,
+					executablePath: ObsidianTester.getExe(),
+				})
+				.then((v) => {
+					this.postInit(v).then(() => {
+						res();
+					});
+				})
+				.catch((e) => rej(e));
+		});
+	}
+	public get vault(): Vault {
+		return this.app.vault
+	}
+
+	public async doWithApp(
+		callback: (app: App) => Promise<unknown>
+	): Promise<unknown> {
+		await this.#loadPromise;	
+		return await callback(this.app);
+	}
+
+	public async doWithVault(
+		callback: (vault: Vault) => Promise<unknown>
+	): Promise<unknown> {
+		await this.#loadPromise;
+		return await callback(this.app.vault);
+	}
+
+	public async assertFileEquals(path: string, expectedContent: string, cached: boolean = true) {
+		await this.#loadPromise;
+		const fileContent = await this.readFile(path, cached);
+		
+		expect(fileContent).toEqual(this.normalizeEOL(expectedContent));
+	}
+	public async assertLineEquals(path: string, lineNumber: number, expectedContent: string, cached: boolean = true) {
+		await this.#loadPromise;
+		const fileContent = await this.readFile(path, cached);	
+
+		expect(fileContent.split("\n")[lineNumber]).toEqual(this.normalizeEOL(expectedContent));
+	}
+
+	public async assertLinesEqual(filePath: string, start: number, end: number, expected: string, cached: boolean = true) {
+		await this.#loadPromise;
+		const fileContent = await this.readFile(filePath, cached);
+		const lines = fileContent.split("\n").slice(start, end);
+		const expectedLines = this.normalizeEOL(expected).split("\n");
+		expect(lines.every((l, i) => l == expectedLines[i])).toEqual(true);
+	}
+
+	public getFile(file: string): TFile {
+		let f = this.app.vault.getFileByPath(file);
+		if(!f) {
+			throw new Error("File does not exist in vault.");
+		}
+		return f;
+	}
+	
+	normalizeEOL(str: string): string {
+		return str.split(/\r\n|\r|\n/).join("\n");
+	}
+
+	async readFile(path: string, cached: boolean = true): Promise<string> {
+		await this.#loadPromise;
+		const file = this.getFile(path);
+		return this.normalizeEOL(await (cached ? this.app.vault.cachedRead(file) : this.app.vault.read(file)));
+	}
+
+	private async postInit(electronApp: ElectronApplication) {
+		this.electronApp = electronApp;
+		this.page = await this.electronApp.firstWindow();
+		this.app = await this.page.evaluate<App>("window.app");
+	}
+
+	public static getExe(): string {
+		if (process.platform == "win32") {
+			return path.join(process.env.LOCALAPPDATA!, "Obsidian", "Obsidian.exe");
+		}
+		if (process.platform == "darwin") {
+			throw new Error("use a non-toy operating system, dumbass");
+		}
+		return execSync("command -v obsidian").toString();
+	}
+}

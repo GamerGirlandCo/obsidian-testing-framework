@@ -1,0 +1,38 @@
+name: Playwright Tests
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+jobs:
+  test:
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-node@v4
+      with:
+        node-version: lts/*
+    - name: Install dependencies 
+      run: |
+        apt-get update
+        apt-get install -y jq xdg-utils xvfb
+        curled=$(curl -L https://github.com/obsidianmd/obsidian-releases/raw/refs/heads/master/desktop-releases.json | jq .latestVersion | sed s/\"//g)
+        curl -Lo obsidian.deb "https://github.com/obsidianmd/obsidian-releases/releases/download/v$curled/obsidian_${curled}_amd64.deb"
+        corepack enable
+        yarn install
+        cd packages/test-project
+        yarn playwright install-deps
+        dpkg -i ../../obsidian.deb
+    - name: compile and test!
+      env:
+        XDG_CONFIG_HOME: /root/.config
+      run: |
+        yarn workspace obsidian-testing-framework run tsc
+        yarn workspace obsidian-sample-plugin run test
+    - uses: actions/upload-artifact@v4
+      if: ${{ !cancelled() }}
+      with:
+        name: playwright-report
+        path: playwright-report/
+        retention-days: 30

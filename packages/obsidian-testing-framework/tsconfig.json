@@ -1,0 +1,42 @@
+{
+	"compilerOptions": {
+		"target": "ESNext",
+		"module": "ESNext",
+		"moduleResolution": "Node",
+		"lib": [
+			"es2015",
+			"DOM",
+			"ESNext.Disposable"
+		],
+		
+		"outDir": "lib",
+    "baseUrl": ".",
+		"strict": true,
+		"alwaysStrict": true,
+		"strictFunctionTypes": true,
+		"strictNullChecks": true,
+		"strictPropertyInitialization": false,
+
+		"forceConsistentCasingInFileNames": true,
+		"noImplicitAny": true,
+		"noImplicitReturns": true,
+		"noImplicitThis": true,
+		"noFallthroughCasesInSwitch": true,
+		"noUnusedLocals": true,
+		"noUnusedParameters": true,
+
+		"emitDecoratorMetadata": true,
+		"experimentalDecorators": true,
+		"downlevelIteration": true,
+		"declaration": true,
+		"esModuleInterop": true,
+		"allowSyntheticDefaultImports": true,
+		"pretty": true,
+    "types": ["node"],
+	},
+	"include": [
+		"typings/**/*",
+		"src/**/*"
+  ],
+  "exclude": ["packages/test-project/**/*.ts"]
+}

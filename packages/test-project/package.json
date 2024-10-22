@@ -1,0 +1,34 @@
+{
+	"name": "obsidian-sample-plugin",
+	"version": "1.0.0",
+	"private": true,
+	"description": "This is a sample plugin for Obsidian (https://obsidian.md)",
+	"main": "main.js",
+	"scripts": {
+		"dev": "node esbuild.config.mjs",
+		"build": "tsc -noEmit -skipLibCheck && node esbuild.config.mjs production",
+		"version": "node version-bump.mjs && git add manifest.json versions.json",
+		"test": "xvfb-maybe playwright test"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "MIT",
+	"dependencies": {
+		"obsidian-testing-framework": "workspace:^"
+	},
+	"devDependencies": {
+		"@playwright/test": "^1.48.1",
+		"@types/node": "^16.11.6",
+		"@typescript-eslint/eslint-plugin": "5.29.0",
+		"@typescript-eslint/parser": "5.29.0",
+		"builtin-modules": "3.3.0",
+		"esbuild": "0.17.3",
+		"obsidian": "latest",
+		"playwright": "^1.48.1",
+		"tslib": "2.4.0",
+		"typescript": "4.7.4",
+		"vitest": "^2.1.3",
+		"xvfb-maybe": "^0.2.1"
+	},
+	"type": "module"
+}
