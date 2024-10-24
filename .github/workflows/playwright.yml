@@ -23,7 +23,7 @@ jobs:
         yarn install
         cd packages/test-project
         yarn playwright install-deps
-        dpkg -i ../../obsidian.deb
+        sudo dpkg -i ../../obsidian.deb
     - name: compile and test!
       env:
         XDG_CONFIG_HOME: $HOME/.config
