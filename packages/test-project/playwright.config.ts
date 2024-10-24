@@ -39,7 +39,6 @@ export default defineConfig<ObsidianTestFixtures>({
 	}
 	
   },
-	
   /* Configure projects for major browsers */
   
 

@@ -4,7 +4,7 @@ import { Fixtures } from "@playwright/test";
 import path from "path";
 import { ObsidianTestFixtures } from "./fixtures.js";
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "fs";
-import { getApp, waitForIndexingComplete } from "./util.js";
+import { pageUtils, waitForIndexingComplete } from "./util.js";
 import { execSync } from "child_process";
 import { randomBytes } from "crypto";
 
@@ -47,11 +47,12 @@ function checkToy() {
 }
 
 function generateVaultConfig(vault: string) {
-	const vaultHash = randomBytes(16).toString("hex").toLocaleLowerCase();
+	const vaultHash = randomBytes(8).toString("hex").toLocaleLowerCase();
 	let configLocation;
+	console.log("vault is", vault)
 	checkToy();
 	if (process.platform == "win32") {
-		configLocation = path.join(`${process.env.LOCALAPPDATA}`, "Obsidian");
+		configLocation = path.join(`${process.env.APPDATA}`, "Obsidian");
 	} else {
 		configLocation = path.join(`${process.env.XDG_CONFIG_HOME}`, "obsidian");
 		try {
@@ -122,7 +123,18 @@ const obsidianTestFixtures: Fixtures<ObsidianTestFixtures> = {
 			page = electronApp.windows()[electronApp.windows().length - 1]!;
 			await page.waitForEvent("load");
 			await page.waitForLoadState("domcontentloaded");
-			await waitForIndexingComplete(await getApp(page));
+			for(let fn of Object.entries(pageUtils)) {
+				await page.exposeFunction(fn[0], fn[1]);
+			}
+			try {
+				await waitForIndexingComplete(page);
+			} catch(e) {
+				console.warn("timed out waiting for metadata cache. continuing...");
+			}
+			page.on("pageerror", exc => {
+				console.error("EXCEPTION");
+				console.error(exc);
+			})
 			page.on("console", async (msg) => {
 				console.log(
 					...(await Promise.all(msg.args().map((a) => a.jsonValue())))
