@@ -74,7 +74,6 @@ export async function assertLinesEqual(
 }
 
 const getFile = (file: string): TFile => {
-	console.log("gfbp", window.app.vault.getFileByPath, file)
 	let f = window.app.vault.getFileByPath(file);
 	if (!f) {
 		throw new Error("File does not exist in vault.");
@@ -99,11 +98,8 @@ export async function readFile(
 	const fn = getFile.toString();
 	return normalizeEOL(
 		await doWithApp(page, async (app, args) => {
-			console.log(args);
-			console.log(app.vault.getFileByPath)
 			const gf = eval(`(${args.getFile})`);
-			console.log("file", gf);
-			const file = (eval(args.getFile))(args.path);
+			const file = gf(args.path);
 			return await (args.cached ? app.vault.cachedRead(file) : app.vault.read(file));
 		}, {path, cached, getFile: fn})
 	);
@@ -129,7 +125,6 @@ export async function doWithApp<T = unknown, A = any>(
 	const cbStr = callback.toString();
 	return await page.evaluate<T, {__callback: string, args: A}>(async ({__callback: cb, args}) => {
 		const func = new Function("args", `return ((${cb}))(window.app, args)`)
-		console.log(func.toString());
 		return await func(args);
 	}, {__callback: cbStr, args});
 }
