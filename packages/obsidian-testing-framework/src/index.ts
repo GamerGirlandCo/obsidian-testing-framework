@@ -120,16 +120,13 @@ const obsidianTestFixtures: Fixtures<ObsidianTestFixtures> = {
 			// console.log("windows", windows);
 			let page = windows[windows.length - 1]!;
 			await page.waitForLoadState("domcontentloaded");
-			page = electronApp.windows()[electronApp.windows().length - 1]!;
-			await page.waitForEvent("load");
-			await page.waitForLoadState("domcontentloaded");
-			for(let fn of Object.entries(pageUtils)) {
-				await page.exposeFunction(fn[0], fn[1]);
-			}
 			try {
 				await waitForIndexingComplete(page);
 			} catch(e) {
 				console.warn("timed out waiting for metadata cache. continuing...");
+			}
+			for(let fn of Object.entries(pageUtils)) {
+				await page.exposeFunction(fn[0], fn[1]);
 			}
 			page.on("pageerror", exc => {
 				console.error("EXCEPTION");
