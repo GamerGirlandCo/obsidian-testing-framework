@@ -15,7 +15,8 @@
     "xvfb-maybe": "^0.2.1"
   },
   "files": [
-    "./lib"
+    "./lib",
+		"./README.md"
   ],
   "version": "0.0.1",
   "exports": {
