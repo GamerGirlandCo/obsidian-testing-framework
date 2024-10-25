@@ -18,7 +18,8 @@
     "./lib",
     "../../README.md"
   ],
-  "version": "0.0.2",
+  "readme": "",
+  "version": "0.0.3",
   "exports": {
     ".": {
       "types": "./lib/index.d.ts",
@@ -38,7 +39,7 @@
   "scripts": {
     "build": "tsc",
     "lint": "tslint -c tslint.json src/**/*.ts",
-    "prepare": "yarn rimraf lib && yarn build"
+    "prepublish": "rm README.md && cp ../../README.md . && rimraf lib && yarn build"
   },
   "devDependencies": {
     "@types/tmp": "^0",
