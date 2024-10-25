@@ -5,7 +5,6 @@ import path from "path";
 import { ObsidianTestFixtures } from "./fixtures.js";
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "fs";
 import { pageUtils, waitForIndexingComplete } from "./util.js";
-import { execSync } from "child_process";
 import { randomBytes } from "crypto";
 
 export interface ObsidianTestingConfig {
@@ -33,7 +32,7 @@ export function getExe(): string {
 	];
 	for (let i = 0; i < possibleDirs.length; i++) {
 		if (existsSync(possibleDirs[i])) {
-			console.log(execSync(`ls -l ${possibleDirs[i]}`).toString());
+			// console.log(execSync(`ls -l ${possibleDirs[i]}`).toString());
 			return path.join(possibleDirs[i], "resources", "app.asar");
 		}
 	}
