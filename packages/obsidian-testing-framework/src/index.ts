@@ -49,7 +49,7 @@ function checkToy() {
 function generateVaultConfig(vault: string) {
 	const vaultHash = randomBytes(8).toString("hex").toLocaleLowerCase();
 	let configLocation;
-	console.log("vault is", vault)
+	console.log("vault is", vault, existsSync(vault));
 	checkToy();
 	if (process.platform == "win32") {
 		configLocation = path.join(`${process.env.APPDATA}`, "Obsidian");

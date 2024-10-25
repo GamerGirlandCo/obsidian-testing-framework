@@ -134,7 +134,7 @@ export async function doWithApp<T = unknown, A = any>(
  */
 export function waitForIndexingComplete(page: Page) {
 	return page.evaluateHandle<App>("window.app").then((appHandle) => {
-		return appHandle.evaluate(() => {
+		return appHandle.evaluate((app) => {
 			return new Promise((res2, rej2) => {
 				let resolved = false;
 				app.metadataCache.on("resolved", () => {
