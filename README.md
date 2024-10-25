@@ -10,7 +10,7 @@ which is an Electron app under the hood.
 
 ### basic usage
 ```ts
-import {test} from "obsidian-testing-framework";
+import {test} from "obsidian-testing-library";
 test('obsidian app url', async ({ page }) => {
 	console.log(page.url());
 	expect(/obsidian\.md/i.test(page.url())).toBeTruthy()
@@ -20,10 +20,10 @@ test('obsidian app url', async ({ page }) => {
 ```ts
 test("idk", async({page}) => {
 	console.log("idk")
-	let tfile = await doWithApp(page,async (app) => {
+	let tfile = await doWithApp(page, async (app) => {
 		return app.metadataCache.getFirstLinkpathDest("Welcome", "/");
 	});
-	expect(what.basename).toEqual("Welcome")
+	expect(tfile.basename).toEqual("Welcome")
 })
 ```
 
