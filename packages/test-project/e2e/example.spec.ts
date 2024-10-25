@@ -1,7 +1,7 @@
 import { expect } from '@playwright/test';
-import {test} from "obsidian-testing-framework"
+import {test} from "obsidian-testing-library"
 import {TFile} from "obsidian";
-import {assertLineEquals, doWithApp, readFile} from "obsidian-testing-framework/utils";
+import {assertLineEquals, doWithApp, readFile} from "obsidian-testing-library/utils";
 test('something', async ({ page }) => {
 	console.log(page.url());
 	expect(/obsidian\.md/i.test(page.url())).toBeTruthy()

@@ -1,5 +1,5 @@
 import { defineConfig, devices } from '@playwright/test';
-import {ObsidianTestFixtures} from "obsidian-testing-framework/fixture";
+import {ObsidianTestFixtures} from "obsidian-testing-library/fixture";
 import os from "os"
 import path from 'path';
 

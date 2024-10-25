@@ -1,5 +1,5 @@
 {
-  "name": "obsidian-testing-framework",
+  "name": "obsidian-testing-library",
   "packageManager": "yarn@4.5.1",
   "dependencies": {
     "@codemirror/language": "https://github.com/lishid/cm-language",
