@@ -26,9 +26,8 @@ jobs:
         yarn playwright install-deps
         sudo dpkg -i ../../obsidian.deb
     - name: compile and test!
-      env:
-        XDG_CONFIG_HOME: $HOME/.config
       run: |
+        export XDG_CONFIG_HOME=$HOME/.config
         yarn workspace obsidian-testing-framework run tsc
         yarn workspace obsidian-sample-plugin run test
     - uses: actions/upload-artifact@v4
