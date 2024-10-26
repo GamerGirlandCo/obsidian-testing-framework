@@ -1,5 +1,5 @@
 {
-  "name": "obsidian-testing-library",
+  "name": "obsidian-testing-framework",
   "packageManager": "yarn@4.5.1",
   "dependencies": {
     "@codemirror/language": "https://github.com/lishid/cm-language",
@@ -39,7 +39,7 @@
   "scripts": {
     "build": "tsc",
     "lint": "tslint -c tslint.json src/**/*.ts",
-    "prepublish": "rm README.md && cp ../../README.md . && rimraf lib && yarn build"
+    "prepublishOnly": "rm README.md && cp ../../README.md . && rimraf lib && npm run build"
   },
   "devDependencies": {
     "@types/tmp": "^0",

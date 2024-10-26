@@ -28,7 +28,7 @@ jobs:
     - name: compile and test!
       run: |
         export XDG_CONFIG_HOME=$HOME/.config
-        yarn workspace obsidian-testing-library run tsc
+        yarn workspace obsidian-testing-framework run tsc
         yarn workspace obsidian-sample-plugin run test
     - uses: actions/upload-artifact@v4
       if: ${{ !cancelled() }}

@@ -14,7 +14,7 @@
 	"author": "",
 	"license": "MIT",
 	"dependencies": {
-		"obsidian-testing-library": "workspace:^"
+		"obsidian-testing-framework": "workspace:^"
 	},
 	"devDependencies": {
 		"@playwright/test": "^1.48.1",

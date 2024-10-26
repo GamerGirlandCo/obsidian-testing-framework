@@ -2487,7 +2487,7 @@ __metadata:
     builtin-modules: "npm:3.3.0"
     esbuild: "npm:0.17.3"
     obsidian: "npm:latest"
-    obsidian-testing-library: "workspace:^"
+    obsidian-testing-framework: "workspace:^"
     playwright: "npm:^1.48.1"
     tslib: "npm:2.4.0"
     typescript: "npm:4.7.4"
@@ -2496,15 +2496,15 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"obsidian-testing-library-parent@workspace:.":
+"obsidian-testing-framework-parent@workspace:.":
   version: 0.0.0-use.local
-  resolution: "obsidian-testing-library-parent@workspace:."
+  resolution: "obsidian-testing-framework-parent@workspace:."
   languageName: unknown
   linkType: soft
 
-"obsidian-testing-library@workspace:^, obsidian-testing-library@workspace:packages/obsidian-testing-framework":
+"obsidian-testing-framework@workspace:^, obsidian-testing-framework@workspace:packages/obsidian-testing-framework":
   version: 0.0.0-use.local
-  resolution: "obsidian-testing-library@workspace:packages/obsidian-testing-framework"
+  resolution: "obsidian-testing-framework@workspace:packages/obsidian-testing-framework"
   dependencies:
     "@codemirror/language": "https://github.com/lishid/cm-language"
     "@codemirror/state": "npm:^6.0.1"

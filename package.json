@@ -1,5 +1,5 @@
 {
-  "name": "obsidian-testing-library-parent",
+  "name": "obsidian-testing-framework-parent",
   "private": true,
   "packageManager": "yarn@4.5.1",
   "workspaces": [
