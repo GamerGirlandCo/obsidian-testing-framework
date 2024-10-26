@@ -53,10 +53,10 @@ export async function assertLineEquals(
  *
  * @export
  * @param {Page} page - a Playwright page
- * @param {string} path the file to check
+ * @param {string} path - the file to check
  * @param {number} start - the start of the desired line range (0-based)
  * @param {number} end - the end of the desired line range (1-based)
- * @param {string} expected the expected content
+ * @param {string} expected - the expected content
  * @param {boolean} [cached=true] - whether to use `app.vault.cachedRead`
  */
 export async function assertLinesEqual(
@@ -82,13 +82,30 @@ const getFile = (file: string): TFile => {
 }
 
 /**
+ * asserts all lines in the given range match a regex.
+ *
+ * @export
+ * @param {Page} page - a Playwright page
+ * @param {string} path - the file to check
+ * @param {number} start - the start of the desired line range (0-based)
+ * @param {number} end - the end of the desired line range (1-based)
+ * @param {RegExp} regex - the regex to test against
+ * @param {boolean} [cached=true] - whether to use `app.vault.cachedRead`
+ */
+export async function assertLinesMatch(page: Page, path: string, start: number, end: number, regex: RegExp, cached: boolean = true) {
+	const fileContent = await readFile(page, path, cached);
+	const lines = fileContent.split("\n").slice(start, end);
+	expect(lines.every(l => regex.test(l))).toEqual(true);
+}
+
+/**
  * reads the file at `path` and returns its contents
  *
  * @export
  * @param {Page} page - a Playwright page
  * @param {string} path the file to read
  * @param {boolean} [cached=true] - whether to use `app.vault.cachedRead`
- * @return {*}  {Promise<string>} the file's contents
+ * @return {Promise<string>} the file's contents
  */
 export async function readFile(
 	page: Page,
@@ -115,7 +132,7 @@ export async function readFile(
  * @param {Page} page - a Playwright page
  * @param {((a: App, args?: A) => T | Promise<T>)} callback - the function to execute
  * @param {A} [args] - optional arguments to pass to the callback
- * @return {*}  {Promise<T>} a promise containing `callback`'s return value (if any)
+ * @return {Promise<T>} a promise containing `callback`'s return value (if any)
  */
 export async function doWithApp<T = unknown, A = any>(
 	page: Page,
