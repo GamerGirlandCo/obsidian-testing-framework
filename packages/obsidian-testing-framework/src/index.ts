@@ -45,6 +45,8 @@ function checkToy() {
 	}
 }
 
+// added shit
+
 function generateVaultConfig(vault: string) {
 	const vaultHash = randomBytes(8).toString("hex").toLocaleLowerCase();
 	let configLocation;
